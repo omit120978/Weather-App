@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather</title>
+    <link rel="stylesheet" href="weather.css">
+
+</head>
+
+<body
+    style="background: url(images/pngtree-gorgeous-sunrise-sky-with-partly-cloudy-colorful-background-image_13597925.png);background-repeat: no-repeat;background-attachment: fixed;background-size: 100% 100%;"
+    </body>
+    <div class="navbar">
+        <center>
+            <h1><u>Weather App</u> </h1>
+        </center>
+    </div>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="enter city name" spellcheck="false">
+            <button><img src="images/unnamed.webp"></button>
+        </div>
+        <div class="error">
+            <p>Invaild City Name</p>
+        </div>
+        <div class="weather">
+            <img src=" images/121-1215478_free-png-clouds-sun-and-rain-drops-weather.png" class="weather-icon">
+            <h1 class="temp"></h1>
+            <h2 class="city">
+            </h2>
+            <div class="details">
+
+                <div class="col">
+                    <img src="images/humidity-icon-512x419-5m7ztixz.png">
+                    <div>
+                        <p class="humidity"></p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <img src="images/wind image.png">
+                    <div>
+                        <p class="wind"></p>
+                        <p>Wind Seepd</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="images/png-transparent-air-pressure-atmospheric-thumbnail.png">
+                    <div>
+                        <p class="  pressure"></p>
+                        <p>Air pressure</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="images/674154.png">
+                    <div>
+                        <p class=" Feels"></p>
+                        <p>Feels Like</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apikey = "8e2ef5472844259722931a4ed576c9e7"
+        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".weather-icon");
+
+        async function checkweather(city) {
+            const response = await fetch(apiurl + city + `&appid=${apikey}`);
+
+            if (response.status == 404) {
+                document.querySelector(".error").style.display = "block";
+                document.querySelector(".weather").style.display = "none";
+            } else {
+                var data = await response.json();
+
+
+                document.querySelector(".city").innerHTML = data.name;
+                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+                document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                document.querySelector(".wind").innerHTML = data.wind.speed + "Km/H";
+                document.querySelector(".pressure").innerHTML = data.main.pressure + "hPa";
+                document.querySelector(".Feels").innerHTML = Math.round(data.main.feels_like) + "°";
+
+                if (data.weather[0].main == "Clouds") {
+                    weatherIcon.src = "images/png-transparent-weather-forecasting-symbol-drizzle-sunny-weather-forecast-blue-cloud-heart-thumbnail.png";
+                }
+                else if (data.weather[0].main == "clear") {
+                    weatherIcon.src = "images/realistic-sun-icon-for-weather-design-sunshine-vector-25369777.jpg";
+                }
+                else if (data.weather[0].main == "Rain") {
+                    weatherIcon.src = "images/weather-7159425_1280.webp";
+                }
+                else if (data.weather[0].main == "drizzle") {
+                    weatherIcon.src = "images/drizzle-weather-3d-icon-download-in-png-blend-fbx-gltf-file-formats--rain-cloud-pack-icons-5753008.webp";
+                }
+                else if (data.weather[0].main == "mist") {
+                    weatherIcon.src = "images/cloud-and-fog-symbols-isolated-on-white-background-3d-illustration-2K2K88W.jpg";
+                }
+
+                document.querySelector(".weather").style.display = "block";
+                document.querySelector(".error").style.display = "none";
+            }
+        }
+        searchBtn.addEventListener("click", () => {
+            checkweather(searchBox.value);
+        })
+
+    </script>
+</body>
+
+</html>
